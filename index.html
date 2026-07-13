@@ -24,7 +24,7 @@
   --ink:#F8FAFC;--ink2:#E2E8F0;--ink3:rgba(255,255,255,.65);--ink4:rgba(255,255,255,.45);--ink5:rgba(255,255,255,.30);--ink6:rgba(255,255,255,.14);
   /* Surfaces */
   --wh:#141F2E;--wh2:#1A2535;--red:#E0584F;--redl:rgba(224,88,79,.14);
-  --fh:'Fraunces',serif;--fb:'Outfit',sans-serif;
+  --fh:'Outfit',sans-serif;--fb:'Outfit',sans-serif;
   --r:20px;--rs:14px;--rl:26px;--rxl:36px;
   --sh:0 4px 24px rgba(0,0,0,.32);--shl:0 12px 40px rgba(0,0,0,.4);--shxl:0 24px 80px rgba(0,0,0,.5);
   --glow:0 0 32px rgba(76,175,120,.22);
@@ -164,6 +164,7 @@ const api = {
   put: (p,b) => _req('PUT', p, b===undefined?{}:b),
   delete: p => _req('DELETE', p),
 };
+const custId = u => (u && (u.customer_code || (u.id ? 'TB-' + String(u.id).padStart(6,'0') : null))) || '\u2014';
 
 // ── RWANDA ADMINISTRATIVE LOCATIONS (Province -> District -> Sector -> Cell -> [Villages]) ──
 // Sourced from NISR/MINALOC official administrative boundaries.
@@ -389,7 +390,7 @@ const T = {
     selectDate: 'Select a preferred date',
     trainingBooked: 'Training booked! Trainer will call you.',
     // Profile
-    profileTitle: 'Farmer Profile',
+    profileTitle: 'Profile',
     settings: 'Settings',
     phone: 'Phone',
     district: 'District',
@@ -703,7 +704,7 @@ const T = {
     farmVisit: 'Gusura umurima',
     selectDate: 'Hitamo itariki wishimiye',
     trainingBooked: 'Amahugurwa yateguwe! Umuhuzabikorwa azakuhamagara.',
-    profileTitle: 'Umwirondoro w\'Ubuhinzi',
+    profileTitle: 'Umwirondoro',
     settings: 'Igenamiterere',
     phone: 'Telefoni',
     district: 'Akarere',
@@ -1013,7 +1014,7 @@ const T = {
     farmVisit: 'Visite à la ferme',
     selectDate: 'Sélectionnez une date préférée',
     trainingBooked: 'Formation réservée! Le formateur vous appellera.',
-    profileTitle: 'Profil Agricole',
+    profileTitle: 'Profil',
     settings: 'Paramètres',
     phone: 'Téléphone',
     district: 'District',
@@ -1196,7 +1197,8 @@ en:{allCats:'All',inStockLbl:'In stock',limitedLbl:'Limited',outLbl:'Out of stoc
  pst_received:'Received',pst_under_review:'Under review',pst_approved:'Approved',pst_ordered:'Ordered',pst_ready:'Ready',pst_cancelled:'Cancelled',
  cancelOrderBtn:'Cancel order',cancelConfirmQ:'Cancel this order? Stock will be released.',
  passwordMin:'Password must be at least 6 characters',invalidCode:'Invalid or expired code',
- leftLbl:'left',needMoreQ:'Need more than what is in stock?'},
+ leftLbl:'left',needMoreQ:'Need more than what is in stock?',
+ customerId:'Customer ID',changePassword:'Change password',currentPassword:'Current password',newPassword:'New password',confirmPassword:'Confirm password',passwordChanged:'Password changed!',passwordsNoMatch:'Passwords do not match',forgotPassword:'Forgot password?',sendResetCode:'Send reset code',resetPasswordBtn:'Reset password',resetDone:'Password reset! Sign in with your new password.',createPasswordTitle:'Create a password',createPasswordSub:'You will use it to sign in',phoneTitle:'Your phone number',phoneSub:'We will send a verification code by SMS'},
 rw:{allCats:'Byose',inStockLbl:'Birahari',limitedLbl:'Bike bisigaye',outLbl:'Byashize',
  unavailableNote:'Iki gicuruzwa ntikiboneka ubu.',preorderBtn:'Ohereza gusaba mbere',
  contactSupportBtn:'Vugana n\u2019abakozi',preorderTitle:'Gusaba mbere',
@@ -1217,7 +1219,8 @@ rw:{allCats:'Byose',inStockLbl:'Birahari',limitedLbl:'Bike bisigaye',outLbl:'Bya
  pst_received:'Byakiriwe',pst_under_review:'Birasuzumwa',pst_approved:'Byemewe',pst_ordered:'Byatumijwe',pst_ready:'Byiteguye',pst_cancelled:'Byahagaritswe',
  cancelOrderBtn:'Hagarika itumiza',cancelConfirmQ:'Uhagarike iri tumiza? Ibicuruzwa bizasubira mu bubiko.',
  passwordMin:'Ijambobanga rigomba kugira byibura inyuguti 6',invalidCode:'Kode ntabwo ariyo cyangwa yarengeje igihe',
- leftLbl:'bisigaye',needMoreQ:'Ukeneye birenze ibihari?'},
+ leftLbl:'bisigaye',needMoreQ:'Ukeneye birenze ibihari?',
+ customerId:'Nomero y\u2019umukiriya',changePassword:'Hindura ijambobanga',currentPassword:'Ijambobanga usanzwe ukoresha',newPassword:'Ijambobanga rishya',confirmPassword:'Emeza ijambobanga',passwordChanged:'Ijambobanga ryahinduwe!',passwordsNoMatch:'Amagambobanga ntasa',forgotPassword:'Wibagiwe ijambobanga?',sendResetCode:'Ohereza kode',resetPasswordBtn:'Shyiraho ijambobanga rishya',resetDone:'Byakunze! Injira ukoresheje ijambobanga rishya.',createPasswordTitle:'Shyiraho ijambobanga',createPasswordSub:'Uzarikoresha winjira',phoneTitle:'Nimero yawe ya telefoni',phoneSub:'Tuzohereza kode kuri SMS'},
 fr:{allCats:'Tout',inStockLbl:'En stock',limitedLbl:'Stock limit\u00e9',outLbl:'\u00c9puis\u00e9',
  unavailableNote:'Ce produit est actuellement indisponible.',preorderBtn:'Envoyer une pr\u00e9-commande',
  contactSupportBtn:'Contacter le service client',preorderTitle:'Pr\u00e9-commande',
@@ -1238,7 +1241,8 @@ fr:{allCats:'Tout',inStockLbl:'En stock',limitedLbl:'Stock limit\u00e9',outLbl:'
  pst_received:'Re\u00e7ue',pst_under_review:'En examen',pst_approved:'Approuv\u00e9e',pst_ordered:'Command\u00e9e',pst_ready:'Pr\u00eate',pst_cancelled:'Annul\u00e9e',
  cancelOrderBtn:'Annuler la commande',cancelConfirmQ:'Annuler cette commande ? Le stock sera lib\u00e9r\u00e9.',
  passwordMin:'Le mot de passe doit contenir au moins 6 caract\u00e8res',invalidCode:'Code invalide ou expir\u00e9',
- leftLbl:'restants',needMoreQ:'Besoin de plus que le stock disponible ?'},
+ leftLbl:'restants',needMoreQ:'Besoin de plus que le stock disponible ?',
+ customerId:'Num\u00e9ro client',changePassword:'Changer le mot de passe',currentPassword:'Mot de passe actuel',newPassword:'Nouveau mot de passe',confirmPassword:'Confirmez le mot de passe',passwordChanged:'Mot de passe modifi\u00e9 !',passwordsNoMatch:'Les mots de passe ne correspondent pas',forgotPassword:'Mot de passe oubli\u00e9 ?',sendResetCode:'Envoyer le code',resetPasswordBtn:'R\u00e9initialiser',resetDone:'R\u00e9ussi ! Connectez-vous avec votre nouveau mot de passe.',createPasswordTitle:'Cr\u00e9ez un mot de passe',createPasswordSub:'Vous l\u2019utiliserez pour vous connecter',phoneTitle:'Votre num\u00e9ro de t\u00e9l\u00e9phone',phoneSub:'Nous enverrons un code par SMS'},
 };
 
 // Language hook — returns translations, live products and categories
@@ -1251,15 +1255,20 @@ const useLang = () => {
 // ── CONTEXT ────────────────────────────────────────────────────────────────
 const Ctx = createContext();
 function AppProvider({children}) {
-  const [user,setUser]         = useState(null);
-  const [screen,setScreen]     = useState('lang');
-  const [lang,setLang]         = useState('en');
-  const [cart,setCart]         = useState([]);
+  const [user,setUser]         = useState(() => { try { const v = localStorage.getItem('tbr_user'); return v ? JSON.parse(v) : null; } catch(_) { return null; } });
+  const [screen,setScreen]     = useState(() => { try { return localStorage.getItem('tbr_user') ? 'main' : 'lang'; } catch(_) { return 'lang'; } });
+  const [lang,setLang]         = useState(() => { try { return localStorage.getItem('tbr_lang') || 'en'; } catch(_) { return 'en'; } });
+  const [cart,setCart]         = useState(() => { try { return JSON.parse(localStorage.getItem('tbr_cart') || '[]'); } catch(_) { return []; } });
   const [orders,setOrders]     = useState([]);
   const [toast,setToast]       = useState(null);
   const [authMode,setAuthMode] = useState('login');
   const [products,setProducts] = useState([]);
   const [categories,setCategories] = useState([]);
+
+  // ── persist session: reloads keep you signed in, cart and language kept ──
+  useEffect(() => { try { user ? localStorage.setItem('tbr_user', JSON.stringify(user)) : localStorage.removeItem('tbr_user'); } catch(_) {} }, [user]);
+  useEffect(() => { try { localStorage.setItem('tbr_lang', lang); } catch(_) {} }, [lang]);
+  useEffect(() => { try { localStorage.setItem('tbr_cart', JSON.stringify(cart)); } catch(_) {} }, [cart]);
   const [loaded,setLoaded]     = useState(false);
   const [notifications,setNotifications] = useState([]);
   const tRef = useRef(null);
@@ -1524,8 +1533,8 @@ function OAFLogo({width, height, opacity}) {
 
 // ── LANGUAGE PICKER ────────────────────────────────────────────────────────
 function LangPicker() {
-  const {setScreen,setLang} = useApp();
-  const choose = code => { setLang(code); setScreen('splash'); };
+  const {setScreen,setLang,user} = useApp();
+  const choose = code => { setLang(code); setScreen(user ? 'main' : 'splash'); };
   const langs = [
     {code:'en', native:'English',    abbr:'EN', sub:'English'},
     {code:'rw', native:'Kinyarwanda', abbr:'RW', sub:'Ikinyarwanda'},
@@ -1539,14 +1548,14 @@ function LangPicker() {
         <div style={{width:'80px',height:'80px',background:'rgba(255,255,255,.11)',borderRadius:'24px',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'18px',border:'1.5px solid rgba(255,255,255,.18)',boxShadow:'0 16px 48px rgba(0,0,0,.4)',padding:'14px',backdropFilter:'blur(8px)'}}>
           <OAFLogo width={52} height={40}/>
         </div>
-        <div style={{fontFamily:'Fraunces,serif',fontSize:'40px',fontWeight:'900',color:'white',letterSpacing:'-2px',lineHeight:'1',marginBottom:'6px'}}>Tubura</div>
+        <div style={{fontFamily:'Outfit,sans-serif',fontSize:'40px',fontWeight:'900',color:'white',letterSpacing:'-2px',lineHeight:'1',marginBottom:'6px'}}>Tubura</div>
         <div style={{fontSize:'11px',color:'rgba(255,255,255,.5)',letterSpacing:'.18em',textTransform:'uppercase',fontWeight:'600'}}>Agri Marketplace</div>
         <div style={{width:'40px',height:'2px',background:'linear-gradient(90deg,transparent,#E3B341,transparent)',borderRadius:'2px',marginTop:'14px'}}/>
       </div>
       <div style={{flex:'1',display:'flex',flexDirection:'column',justifyContent:'center',padding:'32px 24px 48px',position:'relative',zIndex:1}}>
         <div className="fu" style={{animationDelay:'.15s'}}>
           <div style={{textAlign:'center',marginBottom:'24px'}}>
-            <div style={{fontFamily:'Fraunces,serif',fontSize:'22px',fontWeight:'700',color:'white',marginBottom:'6px'}}>Choose your language</div>
+            <div style={{fontFamily:'Outfit,sans-serif',fontSize:'22px',fontWeight:'700',color:'white',marginBottom:'6px'}}>Choose your language</div>
             <div style={{fontSize:'13px',color:'rgba(255,255,255,.5)'}}>Hitamo ururimi / Choisissez votre langue</div>
           </div>
           <div style={{display:'flex',flexDirection:'column',gap:'10px'}}>
@@ -1555,7 +1564,7 @@ function LangPicker() {
                 style={{animationDelay:(0.25+i*0.08)+'s',display:'flex',alignItems:'center',gap:'14px',padding:'13px 16px',background:'rgba(20,31,46,.7)',border:'1.5px solid rgba(255,255,255,.14)',borderRadius:'16px',cursor:'pointer',width:'100%',textAlign:'left',backdropFilter:'blur(6px)'}}>
                 <div style={{width:'38px',height:'38px',borderRadius:'11px',background:'rgba(255,255,255,.10)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'12px',fontWeight:'800',letterSpacing:'.02em',color:'white',flexShrink:'0',border:'1px solid rgba(255,255,255,.14)'}}>{l.abbr}</div>
                 <div style={{flex:'1'}}>
-                  <div style={{fontFamily:'Fraunces,serif',fontSize:'16px',fontWeight:'700',color:'white',marginBottom:'1px'}}>{l.native}</div>
+                  <div style={{fontFamily:'Outfit,sans-serif',fontSize:'16px',fontWeight:'700',color:'white',marginBottom:'1px'}}>{l.native}</div>
                   <div style={{fontSize:'11px',color:'rgba(255,255,255,.5)',fontWeight:'500'}}>{l.sub}</div>
                 </div>
                 <IC n="arrow" size={16} color="rgba(255,255,255,.5)"/>
@@ -1591,7 +1600,7 @@ function Splash() {
           <div style={{position:'absolute',top:'0',left:'0',right:'0',height:'50%',background:'linear-gradient(180deg,rgba(255,255,255,.14),transparent)',borderRadius:'32px 32px 0 0',pointerEvents:'none'}}/>
           <div style={{position:'relative',zIndex:1}}><OAFLogo width={68} height={52}/></div>
         </div>
-        <div style={{fontFamily:'Fraunces,serif',fontSize:'58px',fontWeight:'900',color:'white',letterSpacing:'-3px',lineHeight:'1',marginBottom:'10px',textShadow:'0 4px 28px rgba(0,0,0,.4)'}}>Tubura</div>
+        <div style={{fontFamily:'Outfit,sans-serif',fontSize:'58px',fontWeight:'900',color:'white',letterSpacing:'-3px',lineHeight:'1',marginBottom:'10px',textShadow:'0 4px 28px rgba(0,0,0,.4)'}}>Tubura</div>
         <div style={{fontSize:'11px',color:'rgba(255,255,255,.5)',letterSpacing:'.26em',textTransform:'uppercase',fontWeight:'600'}}>{t.tagline}</div>
         <div style={{width:'52px',height:'2px',background:'linear-gradient(90deg,transparent,#E3B341,transparent)',borderRadius:'2px',marginTop:'22px',opacity:'.85'}}/>
       </div>
@@ -1610,6 +1619,9 @@ function Auth() {
   const [name,setName]         = useState('');
   const [phone,setPhone]       = useState('');
   const [password,setPassword] = useState('');
+  const [password2,setPassword2] = useState('');
+  const [forgot,setForgot]     = useState(0);      // 0 off | 1 phone | 2 code + new password
+  const [resetCode,setResetCode] = useState('');
   const [dob,setDob]           = useState('');
   const [gender,setGender]     = useState('');
   const [custType,setCustType] = useState('');
@@ -1659,12 +1671,13 @@ function Auth() {
     catch(e) { showToast(e.message || t.invalidCode); setLoading(false); return; }
     const profile = {
       name, phone: fullPhone, password, customer_type: custType,
+      gender: gender || null, dob: dob || null, language: (t._lang || 'en'),
       province, district, sector, cell, village,
     };
     let userData;
     try { userData = await api.post('/api/auth/signup', profile); }
     catch(e) { showToast(e.message); setLoading(false); return; }
-    setUser(userData); setStep(5);
+    setUser(userData); setStep(7);
     setLoading(false);
   };
 
@@ -1685,8 +1698,7 @@ function Auth() {
       return;
     }
     if (step === 1) {
-      if (!name || !phone) { showToast(t.fillRequired); return; }
-      if (phone.length < 9) { showToast(t.validPhone); return; }
+      if (!name) { showToast(t.fillRequired); return; }
       if (!gender) { showToast(t.selectGender); return; }
       if (!custType) { showToast(t.selectType); return; }
       if (dob && (age===null || age<12 || age>120)) { showToast(t.validAge); return; }
@@ -1695,11 +1707,18 @@ function Auth() {
       if (!district) { showToast(t.fillRequired); return; }
       setStep(3);
     } else if (step === 3) {
+      setStep(4);
+    } else if (step === 4) {
+      if ((password||'').length < 6) { showToast(t.passwordMin); return; }
+      if (password !== password2) { showToast(t.passwordsNoMatch); return; }
+      setStep(5);
+    } else if (step === 5) {
+      if (!phone || phone.length < 9) { showToast(t.validPhone); return; }
       setLoading(true);
       try { await api.post('/api/auth/request-otp', {phone: fullPhone}); } catch(_) {}
       showToast(t.codeSentMsg + phone);
-      setLoading(false); setStep(4);
-    } else if (step === 4) {
+      setLoading(false); setStep(6);
+    } else if (step === 6) {
       const code = otp.join('');
       if (code.length < 6) { showToast(t.enterCode); return; }
       finishSignup();
@@ -1722,18 +1741,18 @@ function Auth() {
           <div style={{width:'44px',height:'44px',background:'rgba(255,255,255,.11)',borderRadius:'13px',display:'flex',alignItems:'center',justifyContent:'center',border:'1px solid rgba(255,255,255,.18)',padding:'8px'}}>
             <OAFLogo width={28} height={22}/>
           </div>
-          <div style={{fontFamily:'Fraunces,serif',fontSize:'24px',fontWeight:'800',color:'white',letterSpacing:'-1px'}}>Tubura</div>
+          <div style={{fontFamily:'Outfit,sans-serif',fontSize:'24px',fontWeight:'800',color:'white',letterSpacing:'-1px'}}>Tubura</div>
         </div>
-        <div style={{fontFamily:'Fraunces,serif',fontSize:'26px',fontWeight:'700',color:'white',marginBottom:'4px'}}>
+        <div style={{fontFamily:'Outfit,sans-serif',fontSize:'26px',fontWeight:'700',color:'white',marginBottom:'4px'}}>
           {isLogin ? t.welcomeBack : t.createAccount}
         </div>
         <div style={{fontSize:'13px',color:'rgba(255,255,255,.6)'}}>
-          {isLogin ? t.signInSub : (step<5 ? (t.onbStepOf + step + t.onbStepOfMid + '4') : t.createSub)}
+          {isLogin ? t.signInSub : (step<5 ? (t.onbStepOf + step + t.onbStepOfMid + '6') : t.createSub)}
         </div>
       </div>
       <div style={{padding:'22px'}}>
 
-        {isLogin && (
+        {isLogin && forgot===0 && (
           <div className="fu">
             <div className="ig"><label>{t.phoneNumber}</label>
               <div style={{display:'flex',gap:'8px'}}>
@@ -1747,6 +1766,60 @@ function Auth() {
             <button className="btn bp bw" style={{marginTop:'6px',borderRadius:'14px'}} onClick={handleContinue} disabled={loading}>
               {loading ? <span className="spin"/> : t.signInBtn}
             </button>
+            <button onClick={()=>setForgot(1)} style={{width:'100%',textAlign:'center',padding:'13px',color:'var(--f3)',fontSize:'14px',fontWeight:'600'}}>{t.forgotPassword}</button>
+          </div>
+        )}
+
+        {isLogin && forgot===1 && (
+          <div className="fu">
+            <div style={{marginBottom:'16px'}}>
+              <div style={{fontFamily:'Outfit,sans-serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'4px'}}>{t.forgotPassword}</div>
+              <div style={{fontSize:'13px',color:'var(--ink3)'}}>{t.phoneSub}</div>
+            </div>
+            <div className="ig"><label>{t.phoneNumber}</label>
+              <div style={{display:'flex',gap:'8px'}}>
+                <div style={{padding:'0 14px',display:'flex',alignItems:'center',border:'1.5px solid var(--cr3)',borderRadius:'var(--rs)',background:'var(--cr2)',fontWeight:'700',color:'var(--ink2)',fontSize:'15px'}}>+250</div>
+                <input style={{flex:'1'}} inputMode="numeric" placeholder="7XX XXX XXX" value={phone} onChange={e=>handlePhone(e.target.value)}/>
+              </div>
+            </div>
+            <button className="btn bp bw" style={{borderRadius:'14px'}} disabled={loading} onClick={async ()=>{
+              if (!phone || phone.length < 9) { showToast(t.validPhone); return; }
+              setLoading(true);
+              try { await api.post('/api/auth/forgot-otp', {phone: fullPhone}); showToast(t.codeSentMsg + phone); setForgot(2); }
+              catch(e) { showToast(e.message); }
+              setLoading(false);
+            }}>{loading ? <span className="spin"/> : t.sendResetCode}</button>
+            <button onClick={()=>setForgot(0)} style={{width:'100%',textAlign:'center',padding:'13px',color:'var(--ink3)',fontSize:'14px'}}>{t.cancel}</button>
+          </div>
+        )}
+
+        {isLogin && forgot===2 && (
+          <div className="fu">
+            <div style={{marginBottom:'16px'}}>
+              <div style={{fontFamily:'Outfit,sans-serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'4px'}}>{t.resetPasswordBtn}</div>
+              <div style={{fontSize:'13px',color:'var(--ink3)'}}>{t.codeSentTo} {fullPhone}</div>
+            </div>
+            <div className="ig"><label>{t.enterCode}</label>
+              <input inputMode="numeric" maxLength={6} value={resetCode} onChange={e=>setResetCode(e.target.value.replace(/\D/g,'').slice(0,6))} style={{textAlign:'center',fontSize:'22px',fontWeight:'700',letterSpacing:'.3em'}}/>
+            </div>
+            <div className="ig"><label>{t.newPassword}</label>
+              <input type="password" value={password} onChange={e=>setPassword(e.target.value)}/>
+            </div>
+            <div className="ig"><label>{t.confirmPassword}</label>
+              <input type="password" value={password2} onChange={e=>setPassword2(e.target.value)}/>
+            </div>
+            <button className="btn bp bw" style={{borderRadius:'14px'}} disabled={loading} onClick={async ()=>{
+              if (resetCode.length < 6) { showToast(t.enterCode); return; }
+              if ((password||'').length < 6) { showToast(t.passwordMin); return; }
+              if (password !== password2) { showToast(t.passwordsNoMatch); return; }
+              setLoading(true);
+              try {
+                await api.post('/api/auth/reset-password', {phone: fullPhone, code: resetCode, new_password: password});
+                showToast(t.resetDone); setForgot(0); setPassword(''); setPassword2(''); setResetCode('');
+              } catch(e) { showToast(e.message); }
+              setLoading(false);
+            }}>{loading ? <span className="spin"/> : t.resetPasswordBtn}</button>
+            <button onClick={()=>setForgot(1)} style={{width:'100%',textAlign:'center',padding:'13px',color:'var(--ink3)',fontSize:'14px'}}>{t.cancel}</button>
           </div>
         )}
 
@@ -1754,17 +1827,11 @@ function Auth() {
         {!isLogin && step===1 && (
           <div className="fu">
             <div style={{marginBottom:'18px'}}>
-              <div style={{fontFamily:'Fraunces,serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'4px'}}>{t.onbPersonalTitle}</div>
+              <div style={{fontFamily:'Outfit,sans-serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'4px'}}>{t.onbPersonalTitle}</div>
               <div style={{fontSize:'13px',color:'var(--ink3)'}}>{t.onbPersonalSub}</div>
             </div>
             <div className="ig"><label>{t.fullName} *</label>
               <input value={name} onChange={e=>setName(e.target.value)}/>
-            </div>
-            <div className="ig"><label>{t.phoneNumber} *</label>
-              <div style={{display:'flex',gap:'8px'}}>
-                <div style={{padding:'0 14px',display:'flex',alignItems:'center',border:'1.5px solid var(--cr3)',borderRadius:'var(--rs)',background:'var(--cr2)',fontWeight:'700',color:'var(--ink2)',fontSize:'15px'}}>+250</div>
-                <input style={{flex:'1'}} inputMode="numeric" placeholder="7XX XXX XXX" value={phone} onChange={e=>handlePhone(e.target.value)}/>
-              </div>
             </div>
             <div className="ig"><label>{t.dob}</label>
               <input type="date" value={dob} onChange={e=>setDob(e.target.value)}/>
@@ -1803,7 +1870,7 @@ function Auth() {
         {!isLogin && step===2 && (
           <div className="fu">
             <div style={{marginBottom:'18px'}}>
-              <div style={{fontFamily:'Fraunces,serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'4px'}}>{t.onbLocationTitle}</div>
+              <div style={{fontFamily:'Outfit,sans-serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'4px'}}>{t.onbLocationTitle}</div>
               <div style={{fontSize:'13px',color:'var(--ink3)'}}>{t.onbLocationSub}</div>
             </div>
             <div className="ig"><label>{t.provinceLabel}</label>
@@ -1846,7 +1913,7 @@ function Auth() {
         {!isLogin && step===3 && (
           <div className="fu">
             <div style={{marginBottom:'18px'}}>
-              <div style={{fontFamily:'Fraunces,serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'4px'}}>{t.onbInterestsTitle}</div>
+              <div style={{fontFamily:'Outfit,sans-serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'4px'}}>{t.onbInterestsTitle}</div>
               <div style={{fontSize:'13px',color:'var(--ink3)'}}>{t.onbInterestsSub}</div>
             </div>
             {INTEREST_GROUPS.map(group=>(
@@ -1871,15 +1938,50 @@ function Auth() {
           </div>
         )}
 
-        {/* SIGN-UP step 4: OTP verification */}
+        {/* SIGN-UP step 4: create password */}
         {!isLogin && step===4 && (
+          <div className="fu">
+            <div style={{marginBottom:'18px'}}>
+              <div style={{fontFamily:'Outfit,sans-serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'4px'}}>{t.createPasswordTitle}</div>
+              <div style={{fontSize:'13px',color:'var(--ink3)'}}>{t.createPasswordSub}</div>
+            </div>
+            <div className="ig"><label>{t.newPassword}</label>
+              <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••"/>
+            </div>
+            <div className="ig"><label>{t.confirmPassword}</label>
+              <input type="password" value={password2} onChange={e=>setPassword2(e.target.value)}/>
+            </div>
+            <button className="btn bp bw" style={{marginTop:'4px',borderRadius:'14px'}} onClick={handleContinue} disabled={loading}>
+              {loading ? <span className="spin"/> : t.continueBtn}
+            </button>
+          </div>
+        )}
+
+        {/* SIGN-UP step 5: phone number */}
+        {!isLogin && step===5 && (
+          <div className="fu">
+            <div style={{marginBottom:'18px'}}>
+              <div style={{fontFamily:'Outfit,sans-serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'4px'}}>{t.phoneTitle}</div>
+              <div style={{fontSize:'13px',color:'var(--ink3)'}}>{t.phoneSub}</div>
+            </div>
+            <div className="ig"><label>{t.phoneNumber} *</label>
+              <div style={{display:'flex',gap:'8px'}}>
+                <div style={{padding:'0 14px',display:'flex',alignItems:'center',border:'1.5px solid var(--cr3)',borderRadius:'var(--rs)',background:'var(--cr2)',fontWeight:'700',color:'var(--ink2)',fontSize:'15px'}}>+250</div>
+                <input style={{flex:'1'}} inputMode="numeric" placeholder="7XX XXX XXX" value={phone} onChange={e=>handlePhone(e.target.value)}/>
+              </div>
+            </div>
+            <button className="btn bp bw" style={{marginTop:'4px',borderRadius:'14px'}} onClick={handleContinue} disabled={loading}>
+              {loading ? <span className="spin"/> : t.continueBtn}
+            </button>
+          </div>
+        )}
+
+        {/* SIGN-UP step 6: OTP verification */}
+        {!isLogin && step===6 && (
           <div className="fu">
             <div style={{textAlign:'center',marginBottom:'28px'}}>
               <p style={{fontSize:'14px',color:'var(--ink3)',marginBottom:'4px'}}>{t.codeSentTo}</p>
-              <p style={{fontSize:'17px',fontWeight:'700',color:'var(--ink)',fontFamily:'Fraunces,serif'}}>{fullPhone}</p>
-            </div>
-            <div className="ig" style={{marginBottom:'18px'}}><label>{t.password}</label>
-              <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••"/>
+              <p style={{fontSize:'17px',fontWeight:'700',color:'var(--ink)',fontFamily:'Outfit,sans-serif'}}>{fullPhone}</p>
             </div>
             <div style={{display:'flex',gap:'8px',justifyContent:'center',marginBottom:'28px'}}>
               {otp.map((v,i) => (
@@ -1895,12 +1997,12 @@ function Auth() {
         )}
 
         {/* SIGN-UP step 5: Complete */}
-        {!isLogin && step===5 && (
+        {!isLogin && step===7 && (
           <div className="fu" style={{display:'flex',flexDirection:'column',alignItems:'center',textAlign:'center',paddingTop:'12px'}}>
             <div style={{width:'72px',height:'72px',borderRadius:'50%',border:'2px solid var(--f3)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'22px',animation:'pop .5s ease'}}>
               <IC n="check" size={32} color="var(--f3)" sw={2.5}/>
             </div>
-            <div style={{fontFamily:'Fraunces,serif',fontSize:'24px',fontWeight:'700',color:'var(--ink)',marginBottom:'8px'}}>{t.onbCompleteTitle}</div>
+            <div style={{fontFamily:'Outfit,sans-serif',fontSize:'24px',fontWeight:'700',color:'var(--ink)',marginBottom:'8px'}}>{t.onbCompleteTitle}</div>
             <div style={{fontSize:'14px',color:'var(--ink3)',marginBottom:'28px'}}>{t.onbCompleteSub}</div>
             <button className="btn bp bw" style={{borderRadius:'14px'}} onClick={()=>{setAuthMode('login');setScreen('main');showToast(t.welcomeNewMsg);}}>
               {t.onbCompleteCta}
@@ -1908,12 +2010,12 @@ function Auth() {
           </div>
         )}
 
-        {step<5 && (
+        {step<7 && (
           <>
             <div className="dv"/>
             <p style={{textAlign:'center',fontSize:'14px',color:'var(--ink3)'}}>
               {isLogin ? t.newToTubura+' ' : t.alreadyAccount+' '}
-              <button onClick={()=>{setAuthMode(isLogin?'signup':'login');setStep(1);setOtp(['','','','','','']);setPhone('');setPassword('');}} style={{color:'var(--f3)',fontWeight:'700',fontSize:'14px'}}>
+              <button onClick={()=>{setAuthMode(isLogin?'signup':'login');setStep(1);setOtp(['','','','','','']);setPhone('');setPassword('');setPassword2('');setForgot(0);setResetCode('');}} style={{color:'var(--f3)',fontWeight:'700',fontSize:'14px'}}>
                 {isLogin ? t.createAccountLink : t.signIn}
               </button>
             </p>
@@ -1928,16 +2030,16 @@ function Auth() {
 const CAROUSEL_IMGS = ['screen1.png','screen2.png','screen3.png'];
 
 function AnnouncementCarousel() {
-  const [banner,setBanner] = React.useState(null);
+  const [banners,setBanners] = React.useState([]);
   const [cur, setCur] = React.useState(0);
   const touchStartX = React.useRef(null);
   const timerRef = React.useRef(null);
 
   React.useEffect(() => {
-    api.get('/api/banner').then(b => setBanner(b && b.title ? b : null)).catch(()=>{});
+    api.get('/api/banners').then(l => setBanners(Array.isArray(l) ? l.filter(b => b && b.title) : [])).catch(()=>{});
   }, []);
 
-  const slides = (banner ? [{type:'banner'}] : []).concat(CAROUSEL_IMGS.map(src => ({type:'img', src})));
+  const slides = banners.length ? banners.map(b => ({type:'banner', b})) : CAROUSEL_IMGS.map(src => ({type:'img', src}));
 
   const resetTimer = React.useCallback(() => {
     clearInterval(timerRef.current);
@@ -1968,12 +2070,12 @@ function AnnouncementCarousel() {
       <div style={{display:'flex',transition:'transform .4s cubic-bezier(.22,1,.36,1)',transform:'translateX(-'+(cur*100)+'%)'}}>
         {slides.map((sl,i) => sl.type==='banner' ? (
           <div key={'b'+i} style={{width:'100%',flexShrink:'0',aspectRatio:'16/7',borderRadius:'var(--r)',position:'relative',overflow:'hidden',background:'linear-gradient(120deg,#16261C,#2E5238)',display:'flex',flexDirection:'column',justifyContent:'center',padding:'16px 20px'}}>
-            {banner.image && <img src={banner.image} alt="" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',opacity:'.35'}} draggable={false}/>}
+            {sl.b.image && <img src={sl.b.image} alt="" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',opacity:'.35'}} draggable={false}/>}
             <div style={{position:'relative',zIndex:1}}>
-              <div style={{fontFamily:'Fraunces,serif',fontSize:'17px',fontWeight:'700',color:'white',marginBottom:'4px'}}>{banner.title}</div>
-              <div style={{fontSize:'12.5px',color:'rgba(255,255,255,.75)',lineHeight:'1.45',maxWidth:'85%'}}>{banner.body}</div>
-              {banner.button_text && (
-                <a href={banner.button_link||'#'} style={{display:'inline-block',marginTop:'10px',background:'#E3B341',color:'#3A2E07',fontWeight:'700',padding:'7px 16px',borderRadius:'100px',fontSize:'12.5px',textDecoration:'none'}}>{banner.button_text}</a>
+              <div style={{fontFamily:'Outfit,sans-serif',fontSize:'17px',fontWeight:'700',color:'white',marginBottom:'4px'}}>{sl.b.title}</div>
+              <div style={{fontSize:'12.5px',color:'rgba(255,255,255,.75)',lineHeight:'1.45',maxWidth:'85%'}}>{sl.b.body}</div>
+              {sl.b.button_text && (
+                <a href={sl.b.button_link||'#'} style={{display:'inline-block',marginTop:'10px',background:'#E3B341',color:'#3A2E07',fontWeight:'700',padding:'7px 16px',borderRadius:'100px',fontSize:'12.5px',textDecoration:'none'}}>{sl.b.button_text}</a>
               )}
             </div>
           </div>
@@ -2015,7 +2117,7 @@ function Home({goTo}) {
             <div style={{width:'42px',height:'42px',borderRadius:'13px',background:'linear-gradient(140deg,#F0C868,#E3B341)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'15px',fontWeight:'700',color:'#1A1206',flexShrink:'0',border:'1.5px solid rgba(255,255,255,.25)',boxShadow:'0 4px 14px rgba(0,0,0,.25)'}}>{initials}</div>
             <div>
               <div style={{fontSize:'11px',color:'rgba(255,255,255,.55)',letterSpacing:'.05em',textTransform:'uppercase',fontWeight:'600',marginBottom:'1px'}}>{greet}</div>
-              <div style={{fontFamily:'Fraunces,serif',fontSize:'17px',fontWeight:'700',color:'white',lineHeight:'1.1'}}>{(user&&user.name)||'Farmer'}</div>
+              <div style={{fontFamily:'Outfit,sans-serif',fontSize:'17px',fontWeight:'700',color:'white',lineHeight:'1.1'}}>{(user&&user.name)||''}</div>
             </div>
           </div>
           <button onClick={()=>setShowNotifs(true)} style={{position:'relative',width:'40px',height:'40px',borderRadius:'12px',background:'rgba(255,255,255,.10)',border:'1px solid rgba(255,255,255,.16)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:'0'}}>
@@ -2025,7 +2127,7 @@ function Home({goTo}) {
         </div>
         <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'18px'}}>
           <OAFLogo width={20} height={15} opacity={0.85}/>
-          <span style={{fontSize:'10px',color:'rgba(255,255,255,.5)',letterSpacing:'.1em',textTransform:'uppercase',fontWeight:'600'}}>Tubura · {(user&&user.phone)||''}</span>
+          <span style={{fontSize:'10px',color:'rgba(255,255,255,.5)',letterSpacing:'.1em',textTransform:'uppercase',fontWeight:'600'}}>{custId(user)}</span>
         </div>
         <div style={{display:'flex',gap:'10px'}}>
           {[{l:t.myDistrict,v:(user&&user.district)||'---'},{l:t.cartItems,v:cartCount+' '+(cartCount!==1?(t.itemPlural||'items'):(t.itemSingle||'item'))}].map(s => (
@@ -2057,7 +2159,7 @@ function Home({goTo}) {
                   <div style={{fontSize:'12px',fontWeight:'700',color:'var(--ink)',marginBottom:'2px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{p.name}</div>
                   <div style={{fontSize:'11px',color:'var(--ink4)',marginBottom:'8px',fontWeight:'500'}}>{p.category}</div>
                   <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-                    <div><span style={{fontSize:'14px',fontWeight:'700',color:'var(--f3)',fontFamily:'Fraunces,serif'}}>{p.price.toLocaleString()}</span><span style={{fontSize:'10px',color:'var(--ink4)',fontWeight:'400'}}> RWF</span></div>
+                    <div><span style={{fontSize:'14px',fontWeight:'700',color:'var(--f3)',fontFamily:'Outfit,sans-serif'}}>{p.price.toLocaleString()}</span><span style={{fontSize:'10px',color:'var(--ink4)',fontWeight:'400'}}> RWF</span></div>
                     <button onClick={e=>{e.stopPropagation();addToCart(p,1);}} style={{background:(p.stock||0)>0?'var(--f1)':'var(--cr3)',border:'none',borderRadius:'10px',width:'30px',height:'30px',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 3px 10px rgba(28,61,42,.28)'}}>
                       <IC n="plus" size={14} color="white" sw={2.5}/>
                     </button>
@@ -2094,7 +2196,7 @@ function PreorderSheet({initName, productId, onClose}) {
     <div className="mbd" onClick={onClose}>
       <div className="msh" onClick={e=>e.stopPropagation()}>
         <div className="mhd"/>
-        <div style={{fontFamily:'Fraunces,serif',fontSize:'22px',fontWeight:'700',color:'var(--ink)',marginBottom:'16px'}}>{t.preorderTitle}</div>
+        <div style={{fontFamily:'Outfit,sans-serif',fontSize:'22px',fontWeight:'700',color:'var(--ink)',marginBottom:'16px'}}>{t.preorderTitle}</div>
         <div className="ig"><label>{t.whatProduct}</label>
           <input value={name} onChange={e=>setName(e.target.value)} disabled={!!productId}/>
         </div>
@@ -2161,7 +2263,7 @@ function Shop() {
         ) : filtered.length===0 ? (
           <div style={{textAlign:'center',padding:'32px 8px'}}>
             <div style={{display:'flex',justifyContent:'center',marginBottom:'14px',opacity:'.2'}}><IC n="search" size={54} color="var(--ink)"/></div>
-            <div style={{fontFamily:'Fraunces,serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'6px'}}>{t.noResultsFound}</div>
+            <div style={{fontFamily:'Outfit,sans-serif',fontSize:'19px',fontWeight:'700',color:'var(--ink)',marginBottom:'6px'}}>{t.noResultsFound}</div>
             <p style={{fontSize:'13px',color:'var(--ink3)',marginBottom:'20px'}}>{t.cantFind}</p>
             <button className="btn bn bw" style={{borderRadius:'14px',marginBottom:'10px'}} onClick={()=>setShowHelp(true)}>{t.contactSupportBtn}</button>
             <button className="btn bp bw" style={{borderRadius:'14px'}} onClick={()=>setPreorderFor({name:search,productId:null})}>{t.preorderBtn}</button>
@@ -2180,7 +2282,7 @@ function Shop() {
                     <div style={{fontSize:'12px',fontWeight:'700',color:'var(--ink)',marginBottom:'2px',lineHeight:'1.3'}}>{p.name}</div>
                     <div style={{fontSize:'11px',color:'var(--ink4)',marginBottom:'8px',fontWeight:'500'}}>{p.unit}</div>
                     <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-                      <div><span style={{fontSize:'14px',fontWeight:'700',color:'var(--f3)',fontFamily:'Fraunces,serif'}}>{p.price.toLocaleString()}</span><span style={{fontSize:'10px',color:'var(--ink4)',fontWeight:'400'}}> RWF</span></div>
+                      <div><span style={{fontSize:'14px',fontWeight:'700',color:'var(--f3)',fontFamily:'Outfit,sans-serif'}}>{p.price.toLocaleString()}</span><span style={{fontSize:'10px',color:'var(--ink4)',fontWeight:'400'}}> RWF</span></div>
                       <button onClick={e=>{e.stopPropagation();tryAdd(p,1);}} style={{background:(p.stock||0)>0?'var(--f1)':'var(--cr3)',border:'none',borderRadius:'10px',width:'30px',height:'30px',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 3px 10px rgba(28,61,42,.28)'}}>
                         <IC n="plus" size={14} color="white" sw={2.5}/>
                       </button>
@@ -2201,7 +2303,7 @@ function Shop() {
             </div>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'8px'}}>
               <div style={{flex:'1',paddingRight:'12px'}}>
-                <div style={{fontFamily:'Fraunces,serif',fontSize:'22px',fontWeight:'700',color:'var(--ink)',lineHeight:'1.15'}}>{sel.name}</div>
+                <div style={{fontFamily:'Outfit,sans-serif',fontSize:'22px',fontWeight:'700',color:'var(--ink)',lineHeight:'1.15'}}>{sel.name}</div>
                 <div style={{fontSize:'13px',color:'var(--ink3)',marginTop:'3px'}}>{sel.category} · {sel.unit}</div>
               </div>
               <span className={'badge '+(sel.stock_label==='out_of_stock'?'bgr':sel.stock_label==='limited'?'bga':'bgg')}>{(sel.stock||0)>0 ? (sel.stock+' '+t.leftLbl) : t.outLbl}</span>
@@ -2219,7 +2321,7 @@ function Shop() {
                 <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'18px'}}>
                   <div>
                     <div style={{fontSize:'11px',color:'var(--ink4)',fontWeight:'600',letterSpacing:'.06em',textTransform:'uppercase',marginBottom:'4px'}}>{t.pricePerUnit}</div>
-                    <div style={{fontFamily:'Fraunces,serif',fontSize:'28px',fontWeight:'700',color:'var(--f3)',lineHeight:'1'}}>{sel.price.toLocaleString()} <span style={{fontSize:'14px',color:'var(--ink3)',fontFamily:'Outfit,sans-serif',fontWeight:'400'}}>RWF</span></div>
+                    <div style={{fontFamily:'Outfit,sans-serif',fontSize:'28px',fontWeight:'700',color:'var(--f3)',lineHeight:'1'}}>{sel.price.toLocaleString()} <span style={{fontSize:'14px',color:'var(--ink3)',fontFamily:'Outfit,sans-serif',fontWeight:'400'}}>RWF</span></div>
                   </div>
                   <div className="qc">
                     <button className="qb" onClick={()=>setQty(q=>Math.max(1,q-1))}>-</button>
@@ -2234,7 +2336,7 @@ function Shop() {
                 )}
                 <div style={{background:'rgba(76,175,120,.10)',borderRadius:'14px',padding:'12px 18px',marginBottom:'16px',display:'flex',justifyContent:'space-between',alignItems:'center',border:'1px solid rgba(76,175,120,.18)'}}>
                   <span style={{fontSize:'13px',color:'var(--f3)',fontWeight:'600'}}>{t.subtotal}</span>
-                  <span style={{fontFamily:'Fraunces,serif',fontSize:'22px',fontWeight:'700',color:'var(--f3)'}}>{(sel.price*Math.min(qty,sel.stock)).toLocaleString()} RWF</span>
+                  <span style={{fontFamily:'Outfit,sans-serif',fontSize:'22px',fontWeight:'700',color:'var(--f3)'}}>{(sel.price*Math.min(qty,sel.stock)).toLocaleString()} RWF</span>
                 </div>
                 <button className="btn bp bw" style={{borderRadius:'14px'}} onClick={()=>tryAdd(sel,qty)}>
                   {t.addToCart} ({Math.min(qty,sel.stock)}) — {(sel.price*Math.min(qty,sel.stock)).toLocaleString()} RWF
@@ -2248,7 +2350,7 @@ function Shop() {
         <div className="mbd" onClick={()=>setConsent(null)}>
           <div className="msh" onClick={e=>e.stopPropagation()}>
             <div className="mhd"/>
-            <div style={{fontFamily:'Fraunces,serif',fontSize:'21px',fontWeight:'700',color:'var(--ink)',marginBottom:'8px'}}>{t.notEnoughStock}</div>
+            <div style={{fontFamily:'Outfit,sans-serif',fontSize:'21px',fontWeight:'700',color:'var(--ink)',marginBottom:'8px'}}>{t.notEnoughStock}</div>
             <p style={{fontSize:'14px',color:'var(--ink2)',marginBottom:'18px',lineHeight:'1.6'}}>
               <b>{consent.p.name}</b> — {t.onlyNAvail.replace('{n}',consent.p.stock)}
             </p>
@@ -2328,7 +2430,7 @@ function Cart({goTo}) {
       <div style={{width:'88px',height:'88px',borderRadius:'50%',border:'2px solid var(--f3)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'24px',animation:'pop .5s ease'}}>
         <IC n="check" size={40} color="var(--f3)" sw={2.5}/>
       </div>
-      <div style={{fontFamily:'Fraunces,serif',fontSize:'28px',fontWeight:'700',color:'var(--f3)',marginBottom:'8px'}}>{t.orderConfirmed}</div>
+      <div style={{fontFamily:'Outfit,sans-serif',fontSize:'28px',fontWeight:'700',color:'var(--f3)',marginBottom:'8px'}}>{t.orderConfirmed}</div>
       <div style={{fontSize:'14px',color:'var(--ink3)',marginBottom:'28px'}}>{t.receiptSent}</div>
       <div className="card" style={{width:'100%',marginBottom:'20px',textAlign:'left'}}>
         <div style={{height:'4px',borderRadius:'4px',background:'linear-gradient(90deg,#2E7D52,#4CAF78,#E3B341)',marginBottom:'16px'}}/>
@@ -2367,7 +2469,7 @@ function Cart({goTo}) {
   if (cart.length===0) return (
     <div className="scr" style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px',textAlign:'center'}}>
       <div style={{display:'flex',justifyContent:'center',marginBottom:'16px',opacity:'.2'}} className="flt"><IC n="cart" size={64} color="var(--ink)"/></div>
-      <div style={{fontFamily:'Fraunces,serif',fontSize:'24px',fontWeight:'700',marginBottom:'8px',color:'var(--ink)'}}>{t.cartEmpty}</div>
+      <div style={{fontFamily:'Outfit,sans-serif',fontSize:'24px',fontWeight:'700',marginBottom:'8px',color:'var(--ink)'}}>{t.cartEmpty}</div>
       <p style={{fontSize:'14px',color:'var(--ink3)',marginBottom:'24px',lineHeight:'1.6'}}>{t.cartEmptySub}</p>
       <button className="btn bp" style={{borderRadius:'100px'}} onClick={()=>goTo(1)}>{t.browseProducts}</button>
     </div>
@@ -2465,7 +2567,7 @@ function Cart({goTo}) {
                 <div style={{fontSize:'13px',fontWeight:'700',color:'var(--ink)',marginBottom:'1px'}}>{item.name}</div>
                 <div style={{fontSize:'12px',color:'var(--ink4)',fontWeight:'500'}}>x {item.qty}</div>
               </div>
-              <div style={{fontWeight:'700',fontSize:'13px',color:'var(--f3)',fontFamily:'Fraunces,serif'}}>{(item.price*item.qty).toLocaleString()} RWF</div>
+              <div style={{fontWeight:'700',fontSize:'13px',color:'var(--f3)',fontFamily:'Outfit,sans-serif'}}>{(item.price*item.qty).toLocaleString()} RWF</div>
             </div>
           ))}
           {preItems.length>0 && (
@@ -2476,7 +2578,7 @@ function Cart({goTo}) {
             </div>
           )}
           <div style={{background:'rgba(76,175,120,.08)',borderRadius:'var(--r)',padding:'16px 18px',margin:'8px 0 20px',border:'1px solid rgba(76,175,120,.16)'}}>
-            <div style={{display:'flex',justifyContent:'space-between',fontFamily:'Fraunces,serif',fontSize:'22px',fontWeight:'700'}}>
+            <div style={{display:'flex',justifyContent:'space-between',fontFamily:'Outfit,sans-serif',fontSize:'22px',fontWeight:'700'}}>
               <span style={{color:'var(--ink2)'}}>{t.total}</span>
               <span style={{color:'var(--f3)'}}>{cartTotal.toLocaleString()} RWF</span>
             </div>
@@ -2486,7 +2588,7 @@ function Cart({goTo}) {
           <div className="mbd" onClick={()=>setShortage(null)}>
             <div className="msh" onClick={e=>e.stopPropagation()}>
               <div className="mhd"/>
-              <div style={{fontFamily:'Fraunces,serif',fontSize:'21px',fontWeight:'700',color:'var(--ink)',marginBottom:'8px'}}>{t.notEnoughStock}</div>
+              <div style={{fontFamily:'Outfit,sans-serif',fontSize:'21px',fontWeight:'700',color:'var(--ink)',marginBottom:'8px'}}>{t.notEnoughStock}</div>
               {shortage.map(x=>(
                 <p key={x.product_id} style={{fontSize:'14px',color:'var(--ink2)',marginBottom:'10px',lineHeight:'1.6'}}>
                   <b>{x.product}</b> — {t.onlyNAvail.replace('{n}',x.available)} ({t.requestedLbl}: {x.requested})
@@ -2525,7 +2627,7 @@ function Cart({goTo}) {
                     <button className="qb" onClick={()=>updateQty(item.id,item.qty+1)}>+</button>
                   </div>
                   <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
-                    <span style={{fontWeight:'700',color:'var(--f3)',fontFamily:'Fraunces,serif'}}>{(item.price*item.qty).toLocaleString()} RWF</span>
+                    <span style={{fontWeight:'700',color:'var(--f3)',fontFamily:'Outfit,sans-serif'}}>{(item.price*item.qty).toLocaleString()} RWF</span>
                     <button onClick={()=>removeFromCart(item.id)} style={{background:'var(--redl)',border:'none',borderRadius:'10px',width:'32px',height:'32px',display:'flex',alignItems:'center',justifyContent:'center'}}>
                       <IC n="x" size={14} color="var(--red)" sw={2.5}/>
                     </button>
@@ -2558,7 +2660,7 @@ function Cart({goTo}) {
         <div style={{background:'rgba(76,175,120,.08)',borderRadius:'var(--r)',padding:'16px 18px',margin:'16px 0',border:'1px solid rgba(76,175,120,.16)'}}>
           <div style={{display:'flex',justifyContent:'space-between',marginBottom:'4px',fontSize:'15px'}}>
             <span style={{color:'var(--ink2)',fontWeight:'600'}}>{t.subtotal}</span>
-            <span style={{fontWeight:'700',fontFamily:'Fraunces,serif',color:'var(--f3)'}}>{cartTotal.toLocaleString()} RWF</span>
+            <span style={{fontWeight:'700',fontFamily:'Outfit,sans-serif',color:'var(--f3)'}}>{cartTotal.toLocaleString()} RWF</span>
           </div>
         </div>
         <button className="btn bp bw" style={{fontSize:'16px',borderRadius:'14px'}} onClick={()=>setView('checkout')}>{t.proceedCheckout}</button>
@@ -2601,7 +2703,7 @@ function Orders() {
   if (orders.length===0 && preorders.length===0) return (
     <div className="scr" style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px',textAlign:'center'}}>
       <div style={{display:'flex',justifyContent:'center',marginBottom:'16px',opacity:'.2'}} className="flt"><IC n="orders" size={64} color="var(--ink)"/></div>
-      <div style={{fontFamily:'Fraunces,serif',fontSize:'24px',fontWeight:'700',marginBottom:'8px',color:'var(--ink)'}}>{t.noOrders}</div>
+      <div style={{fontFamily:'Outfit,sans-serif',fontSize:'24px',fontWeight:'700',marginBottom:'8px',color:'var(--ink)'}}>{t.noOrders}</div>
       <p style={{fontSize:'14px',color:'var(--ink3)',lineHeight:'1.6'}}>{t.noOrdersSub}</p>
     </div>
   );
@@ -2627,7 +2729,7 @@ function Orders() {
             </div>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
               <span style={{fontSize:'12px',color:'var(--ink4)',fontWeight:'500'}}>{o.items.reduce((a,x)=>a+x.qty,0)} {t.itemPlural||'items'}</span>
-              <span style={{fontWeight:'700',fontFamily:'Fraunces,serif',color:'var(--f3)',fontSize:'15px'}}>{o.total.toLocaleString()} RWF</span>
+              <span style={{fontWeight:'700',fontFamily:'Outfit,sans-serif',color:'var(--f3)',fontSize:'15px'}}>{o.total.toLocaleString()} RWF</span>
             </div>
           </div>
         ))}
@@ -2656,7 +2758,7 @@ function Orders() {
           <div className="msh" onClick={e=>e.stopPropagation()}>
             <div className="mhd"/>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'4px'}}>
-              <div style={{fontFamily:'Fraunces,serif',fontSize:'22px',fontWeight:'700',color:'var(--ink)'}}>#{sel.id}</div>
+              <div style={{fontFamily:'Outfit,sans-serif',fontSize:'22px',fontWeight:'700',color:'var(--ink)'}}>#{sel.id}</div>
               <span className={'badge '+stCls(sel.status)}>{stLbl(sel.status)}</span>
             </div>
             <div style={{fontSize:'12.5px',color:'var(--ink4)',marginBottom:'16px'}}>{sel.date} · {sel.time}</div>
@@ -2692,7 +2794,7 @@ function Orders() {
             ))}
             <div style={{display:'flex',justifyContent:'space-between',padding:'12px 0 4px'}}>
               <span style={{fontWeight:'700',fontSize:'15px',color:'var(--ink2)'}}>{t.total}</span>
-              <span style={{fontWeight:'700',fontSize:'17px',fontFamily:'Fraunces,serif',color:'var(--f3)'}}>{sel.total.toLocaleString()} RWF</span>
+              <span style={{fontWeight:'700',fontSize:'17px',fontFamily:'Outfit,sans-serif',color:'var(--f3)'}}>{sel.total.toLocaleString()} RWF</span>
             </div>
 
             {canCancel(sel) && !askCancel && (
@@ -2717,6 +2819,40 @@ function Orders() {
 }
 
 // ── PROFILE ────────────────────────────────────────────────────────────────
+
+function ChangePasswordSheet({onClose}) {
+  const {showToast} = useApp();
+  const t = useLang();
+  const [oldPw,setOldPw] = useState('');
+  const [pw1,setPw1] = useState('');
+  const [pw2,setPw2] = useState('');
+  const [busy,setBusy] = useState(false);
+  const submit = async () => {
+    if (pw1.length < 6) { showToast(t.passwordMin); return; }
+    if (pw1 !== pw2) { showToast(t.passwordsNoMatch); return; }
+    setBusy(true);
+    try {
+      await api.post('/api/auth/change-password', {old_password: oldPw, new_password: pw1});
+      showToast(t.passwordChanged); onClose();
+    } catch(e) { showToast(e.message); }
+    setBusy(false);
+  };
+  return (
+    <div className="mbd" onClick={onClose}>
+      <div className="msh" onClick={e=>e.stopPropagation()}>
+        <div className="mhd"/>
+        <div style={{fontFamily:'Outfit,sans-serif',fontSize:'22px',fontWeight:'700',color:'var(--ink)',marginBottom:'16px'}}>{t.changePassword}</div>
+        <div className="ig"><label>{t.currentPassword}</label><input type="password" value={oldPw} onChange={e=>setOldPw(e.target.value)}/></div>
+        <div className="ig"><label>{t.newPassword}</label><input type="password" value={pw1} onChange={e=>setPw1(e.target.value)}/></div>
+        <div className="ig"><label>{t.confirmPassword}</label><input type="password" value={pw2} onChange={e=>setPw2(e.target.value)}/></div>
+        <button className="btn bp bw" style={{borderRadius:'14px',marginTop:'6px'}} onClick={submit} disabled={busy||!oldPw||!pw1}>
+          {busy?<span className="spin"/>:t.changePassword}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function Profile({goTo}) {
   const {user,setUser,setScreen,showToast} = useApp();
   const t = useLang();
@@ -2725,6 +2861,7 @@ function Profile({goTo}) {
   const [showPrivacy,setShowPrivacy] = useState(false);
   const [showTerms,setShowTerms] = useState(false);
   const [showDelete,setShowDelete] = useState(false);
+  const [showPw,setShowPw] = useState(false);
 
   const addrLine = user && user.district ? [user.village,user.cell,user.sector,user.district].filter(Boolean).join(', ') : t.noAddressSet;
 
@@ -2732,11 +2869,11 @@ function Profile({goTo}) {
     <div className="scr">
       <div className="brand-bg" style={{backgroundImage:'linear-gradient(160deg,rgba(7,17,29,.65) 0%,rgba(7,17,29,.82) 50%,rgba(7,17,29,.94) 100%),url('+TUBURA_HEADER_IMG+')',padding:'52px 22px 32px',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:'-40px',right:'-40px',width:'180px',height:'180px',borderRadius:'50%',border:'1px solid rgba(255,255,255,.1)',pointerEvents:'none'}}/>
-        <div style={{width:'80px',height:'80px',borderRadius:'24px',background:'linear-gradient(140deg,#F0C868,#E3B341)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'28px',fontFamily:'Fraunces,serif',fontWeight:'700',marginBottom:'16px',border:'2px solid rgba(255,255,255,.25)',boxShadow:'0 8px 32px rgba(0,0,0,.4)',color:'#1A1206',position:'relative',zIndex:1}}>
+        <div style={{width:'80px',height:'80px',borderRadius:'24px',background:'linear-gradient(140deg,#F0C868,#E3B341)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'28px',fontFamily:'Outfit,sans-serif',fontWeight:'700',marginBottom:'16px',border:'2px solid rgba(255,255,255,.25)',boxShadow:'0 8px 32px rgba(0,0,0,.4)',color:'#1A1206',position:'relative',zIndex:1}}>
           {user&&user.name?user.name.charAt(0).toUpperCase():'F'}
         </div>
         <div style={{position:'relative',zIndex:1}}>
-          <div style={{fontFamily:'Fraunces,serif',fontSize:'26px',fontWeight:'700',color:'white',letterSpacing:'-.02em',marginBottom:'4px'}}>{(user&&user.name)||'Farmer'}</div>
+          <div style={{fontFamily:'Outfit,sans-serif',fontSize:'26px',fontWeight:'700',color:'white',letterSpacing:'-.02em',marginBottom:'4px'}}>{(user&&user.name)||''}</div>
           <div style={{fontSize:'13px',color:'rgba(255,255,255,.62)',marginBottom:'2px',fontWeight:'500'}}>{(user&&user.phone)||''}</div>
           <div style={{fontSize:'13px',color:'rgba(255,255,255,.5)',display:'flex',alignItems:'center',gap:'6px'}}>
             <IC n="pin" size={13} color="rgba(255,255,255,.5)"/>{addrLine}
@@ -2747,8 +2884,8 @@ function Profile({goTo}) {
       <div style={{padding:'22px'}}>
         <div className="st">{t.profileTitle}</div>
         <div style={{background:'var(--wh)',borderRadius:'var(--r)',marginBottom:'20px',overflow:'hidden',boxShadow:'var(--sh)'}}>
-          {[[t.phone,'phone',(user&&user.phone)||'---'],[t.shippingAddress,'pin',addrLine]].map((row,i)=>(
-            <div key={row[0]} style={{display:'flex',alignItems:'center',gap:'14px',padding:'14px 18px',borderBottom:i<1?'1px solid var(--cr3)':'none'}}>
+          {[[t.customerId,'tag',custId(user)],[t.phone,'phone',(user&&user.phone)||'---'],[t.shippingAddress,'pin',addrLine]].map((row,i,arr)=>(
+            <div key={row[0]} style={{display:'flex',alignItems:'center',gap:'14px',padding:'14px 18px',borderBottom:i<arr.length-1?'1px solid var(--cr3)':'none'}}>
               <div style={{width:'40px',height:'40px',borderRadius:'12px',background:'var(--cr2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:'0'}}><IC n={row[1]} size={17} color="var(--f3)"/></div>
               <div style={{flex:'1',minWidth:'0'}}>
                 <div style={{fontSize:'10px',color:'var(--ink4)',fontWeight:'700',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'2px'}}>{row[0]}</div>
@@ -2761,7 +2898,7 @@ function Profile({goTo}) {
         <div style={{background:'var(--wh)',borderRadius:'var(--r)',marginBottom:'20px',overflow:'hidden',boxShadow:'var(--sh)'}}>
           {[
             {icon:'bell',label:t.notifications,sub:t.notificationsSub,action:()=>setShowNotifs(true)},
-            {icon:'lock',label:t.changePin,sub:t.changePinSub,action:null},
+            {icon:'lock',label:t.changePassword,sub:t.changePassword,action:()=>setShowPw(true)},
             {icon:'phone',label:t.language,sub:t.languageSub,action:()=>setScreen('lang')},
             {icon:'shield',label:t.privacyCookies,sub:t.privacyCookiesSub,action:()=>setShowPrivacy(true)},
             {icon:'file-text',label:t.termsConditions,sub:t.termsConditionsSub,action:()=>setShowTerms(true)},
@@ -2783,7 +2920,7 @@ function Profile({goTo}) {
         <div style={{background:'linear-gradient(135deg,#0F2A1C,#163A26)',borderRadius:'var(--r)',padding:'18px 20px',marginBottom:'20px',textAlign:'center',position:'relative',overflow:'hidden',border:'1px solid rgba(76,175,120,.16)'}}>
           <div style={{position:'absolute',top:'-30px',right:'-30px',opacity:'.08'}} className="flt"><IC n="sprout" size={80} color="white"/></div>
           <div style={{display:'flex',justifyContent:'center',marginBottom:'6px',position:'relative',zIndex:1}}><IC n="sprout" size={28} color="#7DD9A4"/></div>
-          <div style={{fontSize:'14px',fontWeight:'700',color:'white',marginBottom:'2px',position:'relative',zIndex:1,fontFamily:'Fraunces,serif'}}>Powered by One Acre Fund</div>
+          <div style={{fontSize:'14px',fontWeight:'700',color:'white',marginBottom:'2px',position:'relative',zIndex:1,fontFamily:'Outfit,sans-serif'}}>Powered by One Acre Fund</div>
           <div style={{fontSize:'12px',color:'rgba(255,255,255,.45)',position:'relative',zIndex:1}}>Tubura v1.0 · Rwanda 2026</div>
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:'10px'}}>
@@ -2793,6 +2930,7 @@ function Profile({goTo}) {
       </div>
       {showNotifs && <NotificationPanel onClose={()=>setShowNotifs(false)} onOpenOrder={()=>goTo&&goTo(3)}/>}
       {showHelp && <GetHelpModal onClose={()=>setShowHelp(false)}/>}
+      {showPw && <ChangePasswordSheet onClose={()=>setShowPw(false)}/>}
       {showPrivacy && (
         <InfoModal onClose={()=>setShowPrivacy(false)} title={t.privacyTitle} body={t.privacyBody} icon="shield"/>
       )}
@@ -2816,7 +2954,7 @@ function InfoModal({onClose, title, body, icon}) {
           <div style={{width:'44px',height:'44px',borderRadius:'14px',background:'rgba(76,175,120,.14)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:'0'}}>
             <IC n={icon} size={20} color="var(--f3)"/>
           </div>
-          <div style={{fontFamily:'Fraunces,serif',fontSize:'20px',fontWeight:'700',color:'var(--ink)',flex:'1'}}>{title}</div>
+          <div style={{fontFamily:'Outfit,sans-serif',fontSize:'20px',fontWeight:'700',color:'var(--ink)',flex:'1'}}>{title}</div>
           <button onClick={onClose} style={{width:'32px',height:'32px',borderRadius:'50%',background:'var(--cr2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:'0'}}><IC n="x" size={16} color="var(--ink3)"/></button>
         </div>
         <p style={{fontSize:'14px',color:'var(--ink2)',lineHeight:'1.7'}}>{body}</p>
@@ -2852,7 +2990,7 @@ function GetHelpModal({onClose}) {
       <div className="msh" onClick={e=>e.stopPropagation()}>
         <div className="mhd"/>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'4px'}}>
-          <div style={{fontFamily:'Fraunces,serif',fontSize:'22px',fontWeight:'700',color:'var(--ink)'}}>{t.getHelpTitle}</div>
+          <div style={{fontFamily:'Outfit,sans-serif',fontSize:'22px',fontWeight:'700',color:'var(--ink)'}}>{t.getHelpTitle}</div>
           <button onClick={onClose} style={{width:'32px',height:'32px',borderRadius:'50%',background:'var(--cr2)',display:'flex',alignItems:'center',justifyContent:'center'}}><IC n="x" size={16} color="var(--ink3)"/></button>
         </div>
         <p style={{fontSize:'13px',color:'var(--ink3)',marginBottom:'18px',lineHeight:'1.6'}}>{t.getHelpIntro}</p>
@@ -2907,7 +3045,7 @@ function DeleteAccountModal({onClose, onDeleted}) {
           <div style={{width:'64px',height:'64px',borderRadius:'50%',background:'var(--redl)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'14px'}}>
             <IC n="trash" size={26} color="var(--red)"/>
           </div>
-          <div style={{fontFamily:'Fraunces,serif',fontSize:'20px',fontWeight:'700',color:'var(--ink)',marginBottom:'8px'}}>{t.deleteAccountTitle}</div>
+          <div style={{fontFamily:'Outfit,sans-serif',fontSize:'20px',fontWeight:'700',color:'var(--ink)',marginBottom:'8px'}}>{t.deleteAccountTitle}</div>
           <p style={{fontSize:'13px',color:'var(--ink3)',lineHeight:'1.6'}}>{t.deleteAccountBody}</p>
         </div>
         <button className="btn bd bw" style={{borderRadius:'14px',marginBottom:'8px'}} onClick={handleDelete} disabled={deleting}>
@@ -2947,7 +3085,7 @@ function NotificationPanel({onClose, onOpenOrder}) {
       <div className="msh" onClick={e=>e.stopPropagation()}>
         <div className="mhd"/>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'4px'}}>
-          <div style={{fontFamily:'Fraunces,serif',fontSize:'22px',fontWeight:'700',color:'var(--ink)'}}>{t.notificationsTitle}</div>
+          <div style={{fontFamily:'Outfit,sans-serif',fontSize:'22px',fontWeight:'700',color:'var(--ink)'}}>{t.notificationsTitle}</div>
           <button onClick={onClose} style={{width:'32px',height:'32px',borderRadius:'50%',background:'var(--cr2)',display:'flex',alignItems:'center',justifyContent:'center'}}><IC n="x" size={16} color="var(--ink3)"/></button>
         </div>
         {unreadCount > 0 && (
